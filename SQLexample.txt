@@ -1,0 +1,114 @@
+CREATE TABLE EMPLOYEE 
+( 	Fname	varchar(15) NOT NULL,
+	Minit	char,
+	Lname	varchar(15) NOT NULL,
+	Ssn		char(9) 	NOT NULL,
+	Bdate	date,
+	Address	varchar(30),
+	Sex		char,
+	Salary	decimal(10,2),
+	Super_ssn	char(9),
+	Dno		int			NOT NULL,
+	PRIMARY KEY (Ssn)
+);
+
+CREATE TABLE DEPARTMENT
+(	Dname	varchar(15)	NOT NULL,
+	Dnumber	int			NOT NULL,
+	Mgr_ssn char(9)		NOT NULL,
+	Mgr_start_data date,
+	PRIMARY KEY (Dnumber),
+	UNIQUE (Dname),
+	FOREIGN KEY (Mgr_ssn) REFERENCES EMPLOYEE(Ssn)
+);
+
+CREATE TABLE DEPT_LOCATIONS
+(	Dnumber int			NOT NULL,
+	Dlocation varchar(15)	NOT NULL,
+	PRIMARY KEY (Dnumber, Dlocation),
+	FOREIGN KEY (Dnumber) REFERENCES DEPARTMENT(Dnumber)
+);
+
+CREATE TABLE PROJECT
+(	Pname	varchar(15)	NOT NULL,
+	Pnumber int			NOT NULL,
+	Plocation varchar(15),
+	Dnum 	int			NOT NULL,
+	PRIMARY KEY (Pnumber),
+	UNIQUE (Pname),
+	FOREIGN KEY (Dnum) REFERENCES DEPARTMENT(Dnumber)
+);
+
+CREATE TABLE WORKS_ON
+(	Essn	char(9)		NOT NULL,
+	Pno 	int			NOT NULL,
+	Hours	decimal(3,1) NOT NULL,
+	PRIMARY KEY (Essn, Pno),
+	FOREIGN KEY (Essn) REFERENCES EMPLOYEE(Ssn),
+	FOREIGN KEY (Pno) REFERENCES PROJECT(Pnumber)
+);
+
+CREATE TABLE DEPENDENT
+(	Essn	char(9)		NOT NULL,
+	Dependent_name varchar(15) NOT NULL,
+	Sex		char,
+	Bdate	date,
+	Relationship varchar(8),
+	PRIMARY KEY (Essn, Dependent_name),
+	FOREIGN KEY (Essn) REFERENCES EMPLOYEE(Ssn)
+);
+
+
+
+INSERT INTO EMPLOYEE values ('John', 'B', 'Smith', '123456789', '1965-01-09', '731 Fondren, Houston, TX', 'M', '30000', '333445555', 5);
+INSERT INTO EMPLOYEE values ('Franklin', 'T', 'Wong', '333445555', '1955-12-08', '638 Voss, Houston, TX', 'M', '40000', '888665555', 5);
+INSERT INTO EMPLOYEE values ('Alicia', 'J', 'Zelaya', '999887777', '1968-01-19', '3321 Castle, Spring, TX', 'F', '25000', '987654321', 4);
+INSERT INTO EMPLOYEE values ('Jennifer', 'S', 'Wallace', '987654321', '1941-06-20', '291 Berry, Bellaire, TX', 'F', '43000', '888665555', 4);
+INSERT INTO EMPLOYEE values ('Ramesh', 'K', 'Narayan', '666884444', '1962-09-15', '975 Fire Oak, Humble, TX', 'M', '38000', '333445555', 5);
+INSERT INTO EMPLOYEE values ('Joyce', 'A', 'English', '453453453', '1972-07-31', '5631 Rice, Houston, TX', 'F', '25000', '333445555', 5);
+INSERT INTO EMPLOYEE values ('Ahmad', 'V', 'Jabbar', '987987987', '1969-03-29', '980 Dallas, Houston, TX', 'M', '25000', '987654321', 4);
+INSERT INTO EMPLOYEE values ('James', 'E', 'Borg', '888665555', '1937-11-10', '450 Stone, Houston, TX', 'M', '55000', NULL, 1);
+
+
+
+INSERT INTO DEPARTMENT values ('Research', 5, '333445555', '1988-05-22');
+INSERT INTO DEPARTMENT values ('Administration', 4, '987654321', '1995-01-01');
+INSERT INTO DEPARTMENT values ('Headquarters', 1, '888665555', '1981-06-19');
+
+INSERT INTO DEPT_LOCATIONS values (1, 'Houston');
+INSERT INTO DEPT_LOCATIONS values (4, 'Stafford');
+INSERT INTO DEPT_LOCATIONS values (5, 'Bellaire');
+INSERT INTO DEPT_LOCATIONS values (5, 'Sugarland');
+INSERT INTO DEPT_LOCATIONS values (5, 'Houston');
+
+INSERT INTO PROJECT values ('ProductX', 1, 'Bellaire', 5);
+INSERT INTO PROJECT values ('ProductY', 2, 'Sugarland', 5);
+INSERT INTO PROJECT values ('ProductZ', 3, 'Houston', 5);
+INSERT INTO PROJECT values ('Computerization', 10, 'Stafford', 4);
+INSERT INTO PROJECT values ('Reorganization', 20, 'Houston', 1);
+INSERT INTO PROJECT values ('Newbenefits', 30, 'Stafford', 4);
+
+INSERT INTO DEPENDENT values ('333445555', 'Alice', 'F', '1986-04-05', 'Daughter');
+INSERT INTO DEPENDENT values ('333445555', 'Theodore', 'M', '1983-10-25', 'Son');
+INSERT INTO DEPENDENT values ('333445555', 'Joy', 'F', '1958-05-03', 'Spouse');
+INSERT INTO DEPENDENT values ('987654321', 'Abner', 'M', '1942-02-28', 'Spouse');
+INSERT INTO DEPENDENT values ('123456789', 'Michael', 'M', '1988-01-04', 'Son');
+INSERT INTO DEPENDENT values ('123456789', 'Alice', 'F', '1988-12-30', 'Daughter');
+INSERT INTO DEPENDENT values ('123456789', 'Elizabeth', 'F', '1967-05-05', 'Spouse');
+
+INSERT INTO WORKS_ON values ('123456789', 1, 32.5);
+INSERT INTO WORKS_ON values ('123456789', 2, 7.5);
+INSERT INTO WORKS_ON values ('666884444', 3, 40.0);
+INSERT INTO WORKS_ON values ('453453453', 1, 20.0);
+INSERT INTO WORKS_ON values ('453453453', 2, 20.0);
+INSERT INTO WORKS_ON values ('333445555', 2, 10.0);
+INSERT INTO WORKS_ON values ('333445555', 3, 10.0);
+INSERT INTO WORKS_ON values ('333445555', 10, 10.0);
+INSERT INTO WORKS_ON values ('333445555', 20, 10.0);
+INSERT INTO WORKS_ON values ('999887777', 30, 30.0);
+INSERT INTO WORKS_ON values ('999887777', 10, 10.0);
+INSERT INTO WORKS_ON values ('987987987', 10, 35.0);
+INSERT INTO WORKS_ON values ('987987987', 30, 5.0);
+INSERT INTO WORKS_ON values ('987654321', 30, 20.0);
+INSERT INTO WORKS_ON values ('987654321', 20, 15.0);
+INSERT INTO WORKS_ON values ('888665555', 20, NULL);
